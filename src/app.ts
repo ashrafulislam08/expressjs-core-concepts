@@ -6,7 +6,12 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Server is okay')
 })
 
-
-app.listen(port, () => {
-    console.log(`Server is listening on port: ${port}`)
+app.get('/todos', (req: Request, res: Response) => {
+    res.send('Todo Route')
 })
+
+app.post('/todos/create-todo', (req: Request, res: Response) => {
+    res.send('Hello Sudir Bhai')
+})
+
+export default app;

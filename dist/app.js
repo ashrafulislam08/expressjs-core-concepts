@@ -9,6 +9,10 @@ const port = 3000;
 app.get('/', (req, res) => {
     res.send('Server is okay');
 });
-app.listen(port, () => {
-    console.log(`Server is listening on port: ${port}`);
+app.get('/todos', (req, res) => {
+    res.send('Todo Route');
 });
+app.post('/todos/create-todo', (req, res) => {
+    res.send('Hello Sudir Bhai');
+});
+exports.default = app;
