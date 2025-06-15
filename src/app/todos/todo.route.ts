@@ -36,6 +36,11 @@ const todos = [
 const todoRouter = express.Router();
 
 todoRouter.get("/", (req: Request, res: Response) => {
+    // const { isCompleted } = req.query.isCompleted || false;
+    // if(isCompleted) {
+    //     const filteredTodos = todos.filter((todo) => todo.isCompleted == isCompleted);
+    //     return res.json(filteredTodos);
+    // }
     res.json(todos);
 })
 
