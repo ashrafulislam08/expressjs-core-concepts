@@ -60,4 +60,11 @@ todoRouter.put("/update-todo/:id", (req, res) => __awaiter(void 0, void 0, void 
     });
     res.send(update);
 }));
+todoRouter.delete("/delete-todo/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = yield db.collection("todos");
+    const deletedTodo = yield collection.deleteOne({ _id: new mongodb_2.ObjectId(id) });
+    res.send(deletedTodo);
+}));
 exports.default = todoRouter;

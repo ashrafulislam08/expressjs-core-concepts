@@ -56,4 +56,14 @@ todoRouter.put("/update-todo/:id", async(req: Request, res: Response) => {
     res.send(update);
 })
 
+
+todoRouter.delete("/delete-todo/:id", async(req: Request, res: Response) => {
+    const id = req.params.id;
+    const db = await client.db("todosDB");
+    const collection = await db.collection("todos");
+    const deletedTodo = await collection.deleteOne({ _id: new ObjectId(id)})
+    res.send(deletedTodo);
+})
+
+
 export default todoRouter;
