@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import client from "../../config/mongodb";
 
 const todos = [
         {
@@ -51,9 +52,19 @@ todoRouter.get("/:id", (req: Request, res: Response) => {
     res.send(getTodo);
 })
 
-todoRouter.post("/create-todo", (req: Request, res: Response) => {
+todoRouter.post("/create-todo", async (req: Request, res: Response) => {
+    const { title, description, priority, isCompleted} = req.body;
+    const db = await client.db("todosDB");
+    const collection = await db.collection("todos");
+    await collection.insertOne({
+        title: title,
+        description: description,
+        priority: priority,
+        isCompleted: isCompleted
+    })
     console.log(req.body);
-    res.send("Successfully created a todo to list")
+    const todos = await collection.find().toArray();
+    res.json(todos)
 })
 
 export default todoRouter;
