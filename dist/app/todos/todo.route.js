@@ -14,52 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = __importDefault(require("../../config/mongodb"));
-const todos = [
-    {
-        id: 1,
-        title: "Make a website",
-        duration: '1 hours',
-        isCompleted: false,
-    },
-    {
-        id: 2,
-        title: "Work on Machine Learning",
-        duration: '4 hours',
-        isCompleted: true,
-    },
-    {
-        id: 3,
-        title: "Make a Todo App",
-        duration: '1 hours',
-        isCompleted: true,
-    },
-    {
-        id: 4,
-        title: "Make a website",
-        duration: '1 hours',
-        isCompleted: false,
-    },
-    {
-        id: 5,
-        title: "Make a website",
-        duration: '1 hours',
-        isCompleted: false,
-    }
-];
+const mongodb_2 = require("mongodb");
 const todoRouter = express_1.default.Router();
-todoRouter.get("/", (req, res) => {
-    // const { isCompleted } = req.query.isCompleted || false;
-    // if(isCompleted) {
-    //     const filteredTodos = todos.filter((todo) => todo.isCompleted == isCompleted);
-    //     return res.json(filteredTodos);
-    // }
-    res.json(todos);
-});
-todoRouter.get("/:id", (req, res) => {
-    const id = Number(req.params.id);
-    const getTodo = todos.find(todo => todo.id === id);
-    res.send(getTodo);
-});
+todoRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = yield db.collection("todos");
+    const cursor = collection.find({});
+    const todos = yield cursor.toArray();
+    res.send(todos);
+}));
+todoRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = db.collection("todos");
+    const todo = yield collection.findOne({ _id: new mongodb_2.ObjectId(id) });
+    res.json(todo);
+}));
 todoRouter.post("/create-todo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description, priority, isCompleted } = req.body;
     const db = yield mongodb_1.default.db("todosDB");
@@ -73,5 +43,21 @@ todoRouter.post("/create-todo", (req, res) => __awaiter(void 0, void 0, void 0, 
     console.log(req.body);
     const todos = yield collection.find().toArray();
     res.json(todos);
+}));
+todoRouter.put("/update-todo/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = yield db.collection("todos");
+    const { title, description, priority, isCompleted } = req.body;
+    const updatedTodo = {
+        title,
+        description,
+        priority,
+        isCompleted,
+    };
+    const update = yield collection.updateOne({ _id: new mongodb_2.ObjectId(id) }, {
+        $set: updatedTodo
+    });
+    res.send(update);
 }));
 exports.default = todoRouter;
