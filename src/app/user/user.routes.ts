@@ -37,3 +37,14 @@ userRouter.post("/create-user", async(req: Request, res: Response)  => {
     const insertedUser = await collection.insertOne(newUser);
     res.json(insertedUser);
 })
+
+
+userRouter.delete("/:id", async(req: Request, res: Response)  => {
+    const id = req.params.id;
+    const db = await client.db("todosDB");
+    const collection = await db.collection("users");
+    const deletedUser = collection.deleteOne({ _id: new ObjectId(id)})
+    res.json(deletedUser);
+})
+
+export default userRouter;

@@ -42,3 +42,11 @@ userRouter.post("/create-user", (req, res) => __awaiter(void 0, void 0, void 0, 
     const insertedUser = yield collection.insertOne(newUser);
     res.json(insertedUser);
 }));
+userRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = yield db.collection("users");
+    const deletedUser = collection.deleteOne({ _id: new mongodb_2.ObjectId(id) });
+    res.json(deletedUser);
+}));
+exports.default = userRouter;
