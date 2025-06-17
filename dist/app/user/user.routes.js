@@ -31,3 +31,14 @@ userRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function*
     const user = yield collection.findOne(filter);
     res.json(user);
 }));
+userRouter.post("/create-user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, email } = req.body;
+    const newUser = {
+        name: name,
+        email: email,
+    };
+    const db = yield mongodb_1.default.db("todosDB");
+    const collection = yield db.collection("users");
+    const insertedUser = yield collection.insertOne(newUser);
+    res.json(insertedUser);
+}));
