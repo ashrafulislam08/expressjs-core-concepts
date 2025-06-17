@@ -13,3 +13,14 @@ userRouter.get("/", async(req: Request, res: Response) => {
 
 res.json(users);
 })
+
+
+
+userRouter.get("/:id", async(req: Request, res: Response)  => {
+    const id = req.params.id;
+    const db   = await client.db("todosDB");
+    const collection = await db.collection("users");
+    const filter = { _id: new ObjectId(id)};
+    const user = await collection.findOne(filter);
+    res.json(user);
+})
